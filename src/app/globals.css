@@ -25,3 +25,11 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.bg-dark-brown {
+  background-color: rgb(186, 140, 99);
+}
+
+.bg-light-brown {
+  background-color: rgb(216, 170, 139);
+}
