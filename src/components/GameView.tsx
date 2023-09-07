@@ -4,12 +4,15 @@ import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_C
 import { generateBombsValues, generateNewBoard } from "@/util/board_utils";
 import { useEffect, useState } from "react";
 import { GameBoard } from "./GameBoard";
+import { GameStatus } from "@/board/game_state";
 
 export function GameView() {
   const [bomb, setBomb] = useState(generateNewBoard(0))
   const [known, setKnown] = useState(generateNewBoard(0))
   const [values, setValues] = useState(generateNewBoard(0))
   const [flags, setFlags] = useState(generateNewBoard(0))
+
+  const [gameStatus, setGameStatus] = useState(GameStatus.IN_PROGRESS)
 
   useEffect(() => {
     const { bomb, values } = generateBombsValues()
@@ -26,11 +29,15 @@ export function GameView() {
 
     flags[x][y] = 1 - flags[x][y]
     setFlags([...flags])
-  
   }
 
   function handleClick(x: number, y: number) {
     console.log(`Clicked on ${x}, ${y}`)
+
+    if (bomb[x][y] === 1) {
+      setGameStatus(GameStatus.LOST)
+      return
+    }
 
     if (x < 0 || x >= NUMBER_ROWS_COLUMNS || y < 0 || y >= NUMBER_ROWS_COLUMNS) {
       return
@@ -47,9 +54,7 @@ export function GameView() {
 
       for (let i=xMin; i <= xMax ; i++) {
         for (let j=yMin; j <= yMax ; j++) {
-          if (bomb[i][j] === 1 
-            || (i === x && j === y) 
-            || (known[i][j] === 1)) {
+          if (bomb[i][j] === 1 || (i === x && j === y) || (known[i][j] === 1)) {
             continue
           }
           handleClick(i, j)
@@ -58,8 +63,9 @@ export function GameView() {
     }
   }
 
-  return (
-    <GameBoard known={known} bomb={bomb} flags={flags} values={values} 
-    handleClick={handleClick} handleFlag={handleFlag}/>
-  );
+  return (<div>
+    {gameStatus === GameStatus.IN_PROGRESS 
+      ? <GameBoard known={known} bomb={bomb} flags={flags} values={values} handleClick={handleClick} handleFlag={handleFlag}/>
+      : <h1>Game Over</h1>}
+  </div>)
 }
