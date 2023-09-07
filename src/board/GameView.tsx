@@ -24,7 +24,7 @@ export function GameView() {
       return
     }
 
-    flags[x][y] = 1
+    flags[x][y] = 1 - flags[x][y]
     setFlags([...flags])
   
   }
