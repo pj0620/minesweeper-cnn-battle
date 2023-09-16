@@ -1,5 +1,9 @@
+import { FlaskPredictionApiAdapter } from "@/adapter/flask_prediction_api_adapter.ts"
+import { PredictionApiAdapter } from "@/adapter/prediction_api_adapter"
 import { CELL_BATCH_SIZE, GUESS_SIZE } from "@/constants/ai_solver"
 import { NUMBER_ROWS_COLUMNS } from "@/constants/game_board"
+import { CellPredictionRequest } from "@/model/cell_prediction_request"
+import { CellPredictionResponse } from "@/model/cell_prediction_response"
 import { bytesToBase64, generateNewBoard } from "@/util/board_utils"
 
 export class AIPlayerService {
@@ -8,8 +12,13 @@ export class AIPlayerService {
   private locationsToPredict: number[][] = []
   private known: number[][] = generateNewBoard(0)
 
+  private predictionApiAdapter: PredictionApiAdapter;
+
   constructor () {
     this.loadRawBoardSection = this.loadRawBoardSection.bind(this)
+    this.buildCellPredictionRequest = this.buildCellPredictionRequest.bind(this)
+
+    this.predictionApiAdapter = new FlaskPredictionApiAdapter();
   }
 
   public computeVectorRepresentation(known: number[][], values: number[][]) {
@@ -32,10 +41,21 @@ export class AIPlayerService {
       return []
     }
 
-    const batch = this.locationsToPredict.slice(0, CELL_BATCH_SIZE)
-    const boardSections = batch.map(this.loadRawBoardSection)
+    const batch: number[][] = this.locationsToPredict.slice(0, CELL_BATCH_SIZE)
+    const boardSections: CellPredictionRequest[] = batch.map(this.buildCellPredictionRequest)
+    const predictions = await Promise.all(
+      boardSections.map(this.predictionApiAdapter.predictCells)
+    )
 
-    // todo: return promise
+    console.log(predictions)
+  }
+
+  private buildCellPredictionRequest(location: number[]): CellPredictionRequest {
+    return {
+      location,
+      encodedBoardSection: this.loadRawBoardSection(location),
+      guessSize: GUESS_SIZE
+    }
   }
 
   private loadRawBoardSection(location: number[]): string {
