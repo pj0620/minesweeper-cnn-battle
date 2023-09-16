@@ -1,10 +1,12 @@
 "use client";
 
-import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS } from "@/constants/game_board";
+import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, BOARD_UNIT } from "@/constants/game_board";
 import { generateBombsValues, generateNewBoard } from "@/util/board_utils";
 import { useEffect, useState } from "react";
 import { GameBoard } from "./GameBoard";
 import { GameStatus } from "@/board/game_state";
+import { AIPredictionBoard } from "./AIPredictionBoard";
+import { AIPlayerService } from "@/service/ai_player_service";
 
 export function GameView() {
   const [bomb, setBomb] = useState(generateNewBoard(0))
@@ -12,12 +14,18 @@ export function GameView() {
   const [values, setValues] = useState(generateNewBoard(0))
   const [flags, setFlags] = useState(generateNewBoard(0))
 
+  const [safeClickProbs, setSafeClickProbs] = useState(generateNewBoard(0))
+  const [isLoading, setIsLoading] = useState(generateNewBoard(0))
+
   const [gameStatus, setGameStatus] = useState(GameStatus.IN_PROGRESS)
+
+  const aiPlayerService = new AIPlayerService()
 
   useEffect(() => {
     const { bomb, values } = generateBombsValues()
     setBomb(bomb)
     setValues(values)
+    setIsLoading([...isLoading])
   }, []);
   
   function handleFlag(x: number, y: number) {
@@ -31,7 +39,7 @@ export function GameView() {
     setFlags([...flags])
   }
 
-  function handleClick(x: number, y: number) {
+  function resursiveClick(x: number, y: number) {
     console.log(`Clicked on ${x}, ${y}`)
 
     if (bomb[x][y] === 1) {
@@ -57,15 +65,48 @@ export function GameView() {
           if (bomb[i][j] === 1 || (i === x && j === y) || (known[i][j] === 1)) {
             continue
           }
-          handleClick(i, j)
+          resursiveClick(i, j)
         }
       }
     }
   }
 
-  return (<div>
+  function handleClick(x: number, y: number) {
+    resursiveClick(x, y)
+    
+    if (gameStatus !== GameStatus.IN_PROGRESS) {
+      return
+    }
+
+    aiPlayerService.computeVectorRepresentation(known, values)
+    setIsLoading(aiPlayerService.getGuessableMask())
+
+    aiPlayerService.loadBatchOfPoints()
+  }
+    
+  
+
+  return (<div 
+      className="flex game-view flex-wrap">
+    <div 
+      className="game-panel flex-wrap cursor-pointer mr-[10rem]"
+      style={{
+        width: BOARD_SIZE + BOARD_UNIT,
+        height: BOARD_SIZE + BOARD_UNIT
+      }}>
     {gameStatus === GameStatus.IN_PROGRESS 
       ? <GameBoard known={known} bomb={bomb} flags={flags} values={values} handleClick={handleClick} handleFlag={handleFlag}/>
       : <h1>Game Over</h1>}
+    </div>
+    <div 
+      className="ai-panel cursor-not-allowed"
+      style={{
+        width: BOARD_SIZE + BOARD_UNIT,
+        height: BOARD_SIZE + BOARD_UNIT
+      }}>
+    {gameStatus === GameStatus.IN_PROGRESS 
+      ? <AIPredictionBoard known={known} values={values} safeClickProbs={safeClickProbs} isLoading={isLoading}/>
+      : <h1>Game Over</h1>}
+    </div>
   </div>)
 }

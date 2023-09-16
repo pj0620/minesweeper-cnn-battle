@@ -1,22 +1,24 @@
-import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS } from "@/constants/game_board";
+import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT } from "@/constants/game_board";
 import FlagIcon from '@mui/icons-material/Flag';
 
 interface HiddenCellProps {
-  colorIndex: number
+  colorClass?: string
+  manualColor?: string
   handleClick: () => void
   handleFlag: () => void
   flagged: boolean
 }
 
-export function HiddenCell({ colorIndex, handleClick, handleFlag, flagged } : HiddenCellProps) {
+export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, flagged } : HiddenCellProps) {
   return (
     <div
-      className={`${UNKNOWN_COLOR_CLASS[colorIndex]} border border-black text-4xl`}
+      className={`${manualColor ? '' : colorClass} border border-black text-4xl`}
       style={{
-        display: 'grid',
+        'display': 'grid',
         placeItems: 'center',
-        width: BOARD_SIZE / NUMBER_ROWS_COLUMNS + 'vh',
-        height: BOARD_SIZE / NUMBER_ROWS_COLUMNS + 'vh',
+        width: BOARD_SIZE / NUMBER_ROWS_COLUMNS + BOARD_UNIT,
+        height: BOARD_SIZE / NUMBER_ROWS_COLUMNS + BOARD_UNIT,
+        backgroundColor: manualColor
       }}
       onClick={handleClick}
       onContextMenu={(e) => {

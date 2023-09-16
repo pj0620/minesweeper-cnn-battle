@@ -26,3 +26,12 @@ export function generateBombsValues() {
 
   return { bomb, values }
 }
+
+export function bytesToBase64(bytes: number[]): string {
+  const uint8Array = new Uint8Array(bytes);
+  let binaryString = '';
+  uint8Array.forEach(byte => {
+    binaryString += String.fromCharCode(byte);
+  });
+  return btoa(binaryString);
+}

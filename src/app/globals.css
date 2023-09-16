@@ -33,3 +33,35 @@ body {
 .bg-light-brown {
   background-color: rgb(216, 170, 139);
 }
+
+.ai-color-1 {
+  /* background-color: #FFAA95 */
+  background-color: #FFFFFF
+}
+
+.ai-color-2 {
+  /* background-color: #eb8c81 */
+  background-color: #EEEEEE
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate {
+  animation: rotate 5s linear infinite;
+}
+
+@keyframes oscillateOpacity {
+  0%, 100% { opacity: 0.25; }   /* Starts and ends at 0 opacity */
+  50% { opacity: 1; }       /* Midway through the animation, full opacity */
+}
+
+.animated-content {
+  animation: oscillateOpacity 4s infinite; /* 5 seconds for one complete cycle; adjust as needed */
+}
