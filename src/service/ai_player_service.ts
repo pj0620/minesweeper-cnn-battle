@@ -42,10 +42,8 @@ export class AIPlayerService {
     }
 
     const batch: number[][] = this.locationsToPredict.slice(0, CELL_BATCH_SIZE)
-    const boardSections: CellPredictionRequest[] = batch.map(this.buildCellPredictionRequest)
-    const predictions = await Promise.all(
-      boardSections.map(this.predictionApiAdapter.predictCells)
-    )
+    const cellPredictionInputs: CellPredictionRequest[] = batch.map(this.buildCellPredictionRequest)
+    const predictions = this.predictionApiAdapter.predictCells(cellPredictionInputs)
 
     console.log(predictions)
   }

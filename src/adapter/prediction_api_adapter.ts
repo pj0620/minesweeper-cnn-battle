@@ -5,5 +5,5 @@ export interface PredictionApiAdapter {
   /*
     Predicts the probability that a cell at the given location is safe to click.
   */
-  predictCells(request: CellPredictionRequest): Promise<CellPredictionResponse>
+  predictCells(request: CellPredictionRequest[]): Promise<CellPredictionResponse[]>
 }

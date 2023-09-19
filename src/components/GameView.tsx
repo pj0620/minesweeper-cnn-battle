@@ -4,7 +4,7 @@ import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_C
 import { generateBombsValues, generateNewBoard } from "@/util/board_utils";
 import { useEffect, useState } from "react";
 import { GameBoard } from "./GameBoard";
-import { GameStatus } from "@/board/game_state";
+import { GameStatus } from "@/model/game_state";
 import { AIPredictionBoard } from "./AIPredictionBoard";
 import { AIPlayerService } from "@/service/ai_player_service";
 
