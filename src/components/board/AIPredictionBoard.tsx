@@ -1,7 +1,7 @@
 import { ExposedCell } from "@/components/cell/ExposedCell";
 import { HiddenCell } from "@/components/cell/HiddenCell";
 import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, AI_HEADER_COLOR, AI_KNOWN_COLOR_CLASS, BOARD_UNIT, HEADER_HEIGHT_SCALE } from "@/constants/game_board";
-import { LoadingCell } from "./cell/LoadingCell";
+import { LoadingCell } from "../cell/LoadingCell";
 
 interface AIPredictionBoardProps {
   known: number[][]

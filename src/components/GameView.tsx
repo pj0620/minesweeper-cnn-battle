@@ -1,13 +1,14 @@
 "use client";
 
-import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, BOARD_UNIT } from "@/constants/game_board";
+import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, BOARD_UNIT, NUM_BOMBS } from "@/constants/game_board";
 import { generateBombsValues, generateNewBoard } from "@/util/board_utils";
 import { useEffect, useState } from "react";
-import { GameBoard } from "./GameBoard";
+import { GameBoard } from "./board/GameBoard";
 import { GameStatus } from "@/model/game_state";
-import { AIPredictionBoard } from "./AIPredictionBoard";
+import { AIPredictionBoard } from "./board/AIPredictionBoard";
 import { AIPlayerService } from "@/service/ai_player_service";
 import { CellPredictionResponse } from "@/model/cell_prediction_response";
+import { FinalScreen } from "./FinalScreen";
 
 export function GameView() {
   const [bomb, setBomb] = useState(generateNewBoard(0))
@@ -19,6 +20,7 @@ export function GameView() {
   const [isLoading, setIsLoading] = useState(generateNewBoard(0))
 
   const [gameStatus, setGameStatus] = useState(GameStatus.IN_PROGRESS)
+  let [unknownCells, setUnknownCells] = useState(NUMBER_ROWS_COLUMNS * NUMBER_ROWS_COLUMNS)
 
   const aiPlayerService = new AIPlayerService()
 
@@ -26,11 +28,12 @@ export function GameView() {
     const { bomb, values } = generateBombsValues()
     setBomb(bomb)
     setValues(values)
-    setIsLoading([...isLoading])
   }, []);
   
   function handleFlag(x: number, y: number) {
     console.log(`Flagged ${x}, ${y}`)
+
+    if (gameStatus !== GameStatus.IN_PROGRESS) return
     
     if (x < 0 || x >= NUMBER_ROWS_COLUMNS || y < 0 || y >= NUMBER_ROWS_COLUMNS) {
       return
@@ -43,13 +46,12 @@ export function GameView() {
   function resursiveClick(x: number, y: number) {
     console.log(`Clicked on ${x}, ${y}`)
 
-    if (bomb[x][y] === 1) {
-      setGameStatus(GameStatus.LOST)
+    if (x < 0 || x >= NUMBER_ROWS_COLUMNS || y < 0 || y >= NUMBER_ROWS_COLUMNS) {
       return
     }
 
-    if (x < 0 || x >= NUMBER_ROWS_COLUMNS || y < 0 || y >= NUMBER_ROWS_COLUMNS) {
-      return
+    if (known[x][y] === 0) {
+      setUnknownCells(--unknownCells)
     }
 
     known[x][y] = 1
@@ -72,13 +74,7 @@ export function GameView() {
     }
   }
 
-  function handleClick(x: number, y: number) {
-    resursiveClick(x, y)
-    
-    if (gameStatus !== GameStatus.IN_PROGRESS) {
-      return
-    }
-
+  async function updateBoardProbabilities() {
     aiPlayerService.computeVectorRepresentation(known, values)
     setIsLoading(aiPlayerService.getGuessableMask())
 
@@ -88,7 +84,7 @@ export function GameView() {
     
     let errorDuringPrediction = false
     while (aiPlayerService.hasMoreLocationsToPredict() && !errorDuringPrediction) {
-      aiPlayerService.loadBatchOfPoints().then((res: CellPredictionResponse[]) => {
+      await aiPlayerService.loadBatchOfPoints().then((res: CellPredictionResponse[]) => {
         // get maximum of cell probabilities
         let max = Math.max(...res.map(x => Number.isNaN(x.safe_click_probability) ? 0 : x.safe_click_probability))
   
@@ -113,6 +109,47 @@ export function GameView() {
     }
   }
 
+  function handleClick(x: number, y: number) {
+
+    if (gameStatus !== GameStatus.IN_PROGRESS) {
+      return
+    }
+
+    if (known[x][y] === 1) {
+      return
+    }
+
+    if (bomb[x][y] === 1) {
+      setGameStatus(GameStatus.LOST)
+      return
+    }
+
+    resursiveClick(x, y)
+
+    console.log(`unknownCells = ${unknownCells}`)
+
+    if (unknownCells === NUM_BOMBS) {
+      setGameStatus(GameStatus.WON)
+      return
+    }
+
+    updateBoardProbabilities()
+  }
+
+  function restartGame() {
+    const { bomb, values } = generateBombsValues()
+    setBomb(bomb)
+    setValues(values)
+
+    setKnown(generateNewBoard(0))
+    setFlags(generateNewBoard(0))
+    setSafeClickProbs(generateNewBoard(0))
+    setIsLoading(generateNewBoard(0))
+    setGameStatus(GameStatus.IN_PROGRESS)
+
+    setUnknownCells(NUMBER_ROWS_COLUMNS * NUMBER_ROWS_COLUMNS)
+  }
+
   return (<div 
       className="flex game-view flex-wrap">
     <div 
@@ -133,7 +170,7 @@ export function GameView() {
       }}>
     {gameStatus === GameStatus.IN_PROGRESS 
       ? <AIPredictionBoard known={known} values={values} safeClickProbs={safeClickProbs} isLoading={isLoading}/>
-      : <h1>Game Over</h1>}
+      : <FinalScreen restartGame={restartGame} gameStatus={gameStatus}/>}
     </div>
   </div>)
 }

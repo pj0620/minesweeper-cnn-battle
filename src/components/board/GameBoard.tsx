@@ -58,7 +58,7 @@ export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag,
             display: 'grid',
             placeItems: 'center'
           }}>
-            🧔Human🧔
+            <div>🧔Human🧔</div>
         </div>
       {Array.from({ length: NUMBER_ROWS_COLUMNS * NUMBER_ROWS_COLUMNS }).map((_, index) => (
         getCell(index)

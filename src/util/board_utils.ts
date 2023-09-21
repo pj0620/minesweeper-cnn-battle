@@ -1,4 +1,4 @@
-import { NUMBER_ROWS_COLUMNS } from "@/constants/game_board";
+import { NUMBER_ROWS_COLUMNS, NUM_BOMBS } from "@/constants/game_board";
 
 export const generateNewBoard = (value: number) => Array.from(
   { length: NUMBER_ROWS_COLUMNS }, () => Array.from({ length: NUMBER_ROWS_COLUMNS }, () => value)
@@ -8,7 +8,7 @@ export function generateBombsValues() {
   let placedBombs = 0;
   const bomb = generateNewBoard(0)
   const values = generateNewBoard(0)
-  while (placedBombs < NUMBER_ROWS_COLUMNS) {
+  while (placedBombs < NUM_BOMBS) {
     const x = Math.floor(Math.random() * NUMBER_ROWS_COLUMNS);
     const y = Math.floor(Math.random() * NUMBER_ROWS_COLUMNS);
     if (bomb[x][y] === 1) continue;
