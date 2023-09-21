@@ -1,4 +1,4 @@
-import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT } from "@/constants/game_board";
+import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS } from "@/constants/game_board";
 import LoopIcon from '@mui/icons-material/Loop';
 import { useState, useEffect } from "react";
 
@@ -14,8 +14,8 @@ export function LoadingCell({ colorClass, manualColor} : LoadingCellProps) {
       style={{
         'display': 'grid',
         placeItems: 'center',
-        width: BOARD_SIZE / NUMBER_ROWS_COLUMNS + BOARD_UNIT,
-        height: BOARD_SIZE / NUMBER_ROWS_COLUMNS + BOARD_UNIT,
+        width: BOARD_SIZE_CSS,
+        height: BOARD_SIZE_CSS,
         backgroundColor: 'red'
       }}
       onContextMenu={(e) => {

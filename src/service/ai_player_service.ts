@@ -36,16 +36,31 @@ export class AIPlayerService {
     return this.guessableMask
   }
 
-  public async loadBatchOfPoints() {
+  public hasMoreLocationsToPredict() {
+    return this.locationsToPredict.length > 0
+  }
+
+  public async loadBatchOfPoints(): Promise<CellPredictionResponse[]> {
+    console.log('getting predictions for points')
+
     if (this.locationsToPredict.length === 0) {
       return []
     }
 
-    const batch: number[][] = this.locationsToPredict.slice(0, CELL_BATCH_SIZE)
-    const cellPredictionInputs: CellPredictionRequest[] = batch.map(this.buildCellPredictionRequest)
-    const predictions = this.predictionApiAdapter.predictCells(cellPredictionInputs)
+    const batch: number[][] = this.locationsToPredict.splice(0, CELL_BATCH_SIZE)
 
-    console.log(predictions)
+    console.log(`loading batch of ${batch.length} locations: ${batch}`)
+
+    const cellPredictionInputs: CellPredictionRequest[] = batch.map(this.buildCellPredictionRequest)
+    const predictions = await this.predictionApiAdapter.predictCells(cellPredictionInputs)
+      .catch(err => {
+        console.log(`error while getting predictions`, err)
+        return []
+      })
+
+    console.log(`predictions: ${predictions}`)
+
+    return predictions
   }
 
   private buildCellPredictionRequest(location: number[]): CellPredictionRequest {
@@ -83,6 +98,8 @@ export class AIPlayerService {
         bytes.push(info_byte)
       }
     }
+
+    console.log(`sending bytes: ${bytes}`)
 
     return bytesToBase64(bytes)
   }

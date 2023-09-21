@@ -7,6 +7,7 @@ import { GameBoard } from "./GameBoard";
 import { GameStatus } from "@/model/game_state";
 import { AIPredictionBoard } from "./AIPredictionBoard";
 import { AIPlayerService } from "@/service/ai_player_service";
+import { CellPredictionResponse } from "@/model/cell_prediction_response";
 
 export function GameView() {
   const [bomb, setBomb] = useState(generateNewBoard(0))
@@ -81,10 +82,36 @@ export function GameView() {
     aiPlayerService.computeVectorRepresentation(known, values)
     setIsLoading(aiPlayerService.getGuessableMask())
 
-    aiPlayerService.loadBatchOfPoints()
-  }
+    console.log(`g.bomb = ${bomb}`)
+    console.log(`g.values = ${values}`)
+    console.log(`g.known = ${known}`)
     
+    let errorDuringPrediction = false
+    while (aiPlayerService.hasMoreLocationsToPredict() && !errorDuringPrediction) {
+      aiPlayerService.loadBatchOfPoints().then((res: CellPredictionResponse[]) => {
+        // get maximum of cell probabilities
+        let max = Math.max(...res.map(x => Number.isNaN(x.safe_click_probability) ? 0 : x.safe_click_probability))
   
+        // if max is zero, set to one. No scaling is needed since all values are zero
+        max = max === 0 ? 1 : max
+  
+        // set each safeClickProb to normalizated probability that the cell is safe to click
+        res.forEach((prediction) => {
+          const [x, y] = prediction.location
+          safeClickProbs[x][y] = prediction.safe_click_probability / max
+          isLoading[x][y] = 0
+        })
+        
+        // update state
+        setSafeClickProbs([...safeClickProbs])
+        setIsLoading([...isLoading])
+      })
+      .catch(err => {
+        console.log(err)
+        errorDuringPrediction = true
+      });
+    }
+  }
 
   return (<div 
       className="flex game-view flex-wrap">
@@ -94,9 +121,9 @@ export function GameView() {
         width: BOARD_SIZE + BOARD_UNIT,
         height: BOARD_SIZE + BOARD_UNIT
       }}>
-    {gameStatus === GameStatus.IN_PROGRESS 
-      ? <GameBoard known={known} bomb={bomb} flags={flags} values={values} handleClick={handleClick} handleFlag={handleFlag}/>
-      : <h1>Game Over</h1>}
+    {<GameBoard known={known} bomb={bomb} flags={flags} values={values} 
+            handleClick={handleClick} handleFlag={handleFlag} gameStatus={gameStatus}/>
+    }
     </div>
     <div 
       className="ai-panel cursor-not-allowed"

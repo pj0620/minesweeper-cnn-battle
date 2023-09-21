@@ -1,6 +1,7 @@
 import { ExposedCell } from "@/components/cell/ExposedCell";
 import { HiddenCell } from "@/components/cell/HiddenCell";
-import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, UNKNOWN_COLOR_CLASS, KNOWN_COLOR_CLASS, HUMAN_HEADER_COLOR, BOARD_UNIT, HEADER_HEIGHT_SCALE } from "@/constants/game_board";
+import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, UNKNOWN_COLOR_CLASS, KNOWN_COLOR_CLASS, HUMAN_HEADER_COLOR, BOARD_UNIT, HEADER_HEIGHT_SCALE } from "@/constants/game_board";
+import { GameStatus } from "@/model/game_state";
 
 interface GameBoardProps {
   known: number[][]
@@ -9,9 +10,10 @@ interface GameBoardProps {
   values: number[][]
   handleClick: (x: number, y: number) => void
   handleFlag: (x: number, y: number) => void
+  gameStatus: GameStatus
 }
 
-export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag } : GameBoardProps) {
+export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag, gameStatus } : GameBoardProps) {
   function getCell(index: number) {
     const i = Math.floor(index / NUMBER_ROWS_COLUMNS)
     const j = index % NUMBER_ROWS_COLUMNS
@@ -34,6 +36,7 @@ export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag 
         handleClick={() => {handleClick(i, j)}}
         handleFlag={() => {handleFlag(i, j)}}
         flagged={flags[i][j] === 1}
+        showBomb={(bomb[i][j] === 1) && (gameStatus === GameStatus.LOST) }
       />)
     }
     

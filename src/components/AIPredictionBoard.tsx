@@ -45,6 +45,7 @@ export function AIPredictionBoard({ known, values, safeClickProbs, isLoading } :
         handleClick={() => {}}
         handleFlag={() => {}}
         flagged={false}
+        displayProb={prob}
       />)
     }
 

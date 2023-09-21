@@ -2,6 +2,14 @@ export const BOARD_SIZE = 30;
 export const NUMBER_ROWS_COLUMNS = 10
 export const BOARD_UNIT = 'vw'
 export const HEADER_HEIGHT_SCALE = 1.25
+export const BOARD_SIZE_CSS = `${BOARD_SIZE / NUMBER_ROWS_COLUMNS}${BOARD_UNIT}`
+
+export const FLAG_SIZE_PERCENT = 0.8
+export const FLAG_SIZE_CSS = `${FLAG_SIZE_PERCENT * BOARD_SIZE / NUMBER_ROWS_COLUMNS}${BOARD_UNIT}`
+
+export const PROB_SIZE_PERCENT = 1.0
+export const PROB_SIZE_CSS = `${PROB_SIZE_PERCENT * BOARD_SIZE / NUMBER_ROWS_COLUMNS}${BOARD_UNIT}`
+
 
 export const UNKNOWN_COLOR_CLASS_1 = 'bg-lime-400'
 export const UNKNOWN_COLOR_CLASS_2 = 'bg-lime-500'
