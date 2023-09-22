@@ -75,8 +75,8 @@ export function GameView() {
   }
 
   async function updateBoardProbabilities() {
-    aiPlayerService.computeVectorRepresentation(known, values)
-    setIsLoading(aiPlayerService.getGuessableMask())
+    aiPlayerService.computeVectorRepresentation(known, values, isLoading)
+    setIsLoading([...isLoading])
 
     console.log(`g.bomb = ${bomb}`)
     console.log(`g.values = ${values}`)

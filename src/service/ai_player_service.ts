@@ -21,10 +21,17 @@ export class AIPlayerService {
     this.predictionApiAdapter = new FlaskPredictionApiAdapter();
   }
 
-  public computeVectorRepresentation(known: number[][], values: number[][]) {
+  public computeVectorRepresentation(known: number[][], values: number[][], isLoading: number[][]) {
     const resGuessable = this.findBoundary(known)
     this.guessableMask = resGuessable.mask
     this.locationsToPredict = resGuessable.locations
+
+    for (let i=0; i < NUMBER_ROWS_COLUMNS; i++){
+      for (let j=0; j < NUMBER_ROWS_COLUMNS; j++){
+        isLoading[i][j] = this.guessableMask[i][j]
+      }
+    }
+    
 
     const resValues = this.findBoundary(known, (x) => 1 - x, values)
     this.usableValuesMask = resValues.mask
@@ -142,8 +149,10 @@ export class AIPlayerService {
 
             // if this point is 0 in original array, add to boundary
             if (val_k === 0) {
+              if (result[x][y] !== maskV) {
+                resultList.push([x, y])
+              }
               result[x][y] = maskV
-              resultList.push([x, y])
             }
           }
         }

@@ -40,12 +40,13 @@ export function AIPredictionBoard({ known, values, safeClickProbs, isLoading } :
       blue = Math.max(blue, 0)
 
       return (<HiddenCell 
-        key={index} 
+        key={index}
         manualColor={`rgb(${red} ${green} ${blue})`}
-        handleClick={() => {}}
-        handleFlag={() => {}}
+        handleClick={() => { } }
+        handleFlag={() => { } }
         flagged={false}
-        displayProb={prob}
+        displayProb={prob} 
+        showBomb={false}      
       />)
     }
 
