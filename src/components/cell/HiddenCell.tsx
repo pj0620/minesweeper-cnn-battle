@@ -44,7 +44,7 @@ export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, f
           width: PROB_SIZE_CSS,
           height: PROB_SIZE_CSS
         }}
-        className="font-extrabold prob-text"
+        className="font-extrabold prob-text sm:text-xs"
       > {displayProb.toFixed(2)} </div>)
     }
 

@@ -154,7 +154,7 @@ export function GameView() {
   return (<div 
       className="flex game-view flex-wrap">
     <div 
-      className="game-panel flex-wrap cursor-pointer mr-4"
+      className="game-panel flex-wrap cursor-pointer mr-4 md:mr-3"
       style={{
         width: BOARD_SIZE + BOARD_UNIT,
         height: BOARD_SIZE + BOARD_UNIT
