@@ -86,15 +86,16 @@ export function GameView() {
     while (aiPlayerService.hasMoreLocationsToPredict() && !errorDuringPrediction) {
       await aiPlayerService.loadBatchOfPoints().then((res: CellPredictionResponse[]) => {
         // get maximum of cell probabilities
-        let max = Math.max(...res.map(x => Number.isNaN(x.safe_click_probability) ? 0 : x.safe_click_probability))
+        // let max = Math.max(...res.map(x => Number.isNaN(x.safe_click_probability) ? 0 : x.safe_click_probability))
   
         // if max is zero, set to one. No scaling is needed since all values are zero
-        max = max === 0 ? 1 : max
+        // max = max === 0 ? 1 : max
   
         // set each safeClickProb to normalizated probability that the cell is safe to click
         res.forEach((prediction) => {
           const [x, y] = prediction.location
-          safeClickProbs[x][y] = prediction.safe_click_probability / max
+          // safeClickProbs[x][y] = prediction.safe_click_probability / max
+          safeClickProbs[x][y] = prediction.safe_click_probability
           isLoading[x][y] = 0
         })
         
@@ -107,6 +108,9 @@ export function GameView() {
         errorDuringPrediction = true
       });
     }
+
+    console.log('safeClickProbs')
+    console.table(safeClickProbs)
   }
 
   function handleClick(x: number, y: number) {

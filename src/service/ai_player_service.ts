@@ -1,4 +1,4 @@
-import { FlaskPredictionApiAdapter } from "@/adapter/flask_prediction_api_adapter.ts"
+import { FlaskPredictionApiAdapter } from "@/adapter/flask_prediction_api_adapter"
 import { PredictionApiAdapter } from "@/adapter/prediction_api_adapter"
 import { CELL_BATCH_SIZE, GUESS_SIZE } from "@/constants/ai_solver"
 import { NUMBER_ROWS_COLUMNS } from "@/constants/game_board"
@@ -65,7 +65,7 @@ export class AIPlayerService {
         return []
       })
 
-    console.log(`predictions: ${predictions}`)
+    console.log(`predictions:`, predictions)
 
     return predictions
   }
@@ -86,6 +86,12 @@ export class AIPlayerService {
     let outOfBoard = 1
     let isKnown = 1
     let val = 0
+
+    let outOfBoardDisp = generateNewBoard(0)
+    let isKnownDisp = generateNewBoard(0)
+    let valDisp = generateNewBoard(0)
+
+    let realIdx = 0
     for (let i=x - padding; i <= x + padding; i++) {
       for (let j=y - padding; j <= y + padding; j++) {
         // if outside of board
@@ -103,10 +109,26 @@ export class AIPlayerService {
 
         const info_byte = outOfBoard << 5 | isKnown << 4 | val
         bytes.push(info_byte)
+
+        let ir = Math.floor(realIdx / GUESS_SIZE)
+        let jr = realIdx % GUESS_SIZE
+
+        outOfBoardDisp[ir][jr] = outOfBoard
+        isKnownDisp[ir][jr] = isKnown
+        valDisp[ir][jr] = val
+
+        realIdx++
       }
     }
 
     console.log(`sending bytes: ${bytes}`)
+
+    console.log('outOfBoardDisp')
+    console.table(outOfBoardDisp)
+    console.log('isKnownDisp')
+    console.table(isKnownDisp)
+    console.log('valDisp')
+    console.table(valDisp)
 
     return bytesToBase64(bytes)
   }

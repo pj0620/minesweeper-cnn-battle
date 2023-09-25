@@ -39,3 +39,6 @@ export const HUMAN_HEADER_COLOR = "darkgreen"
 export const AI_HEADER_COLOR = "darkblue"
 
 export const NUM_BOMBS = 10
+
+export const WIN_COLOR = '#006400'
+export const LOSE_COLOR = '#8B0000'
