@@ -50,7 +50,7 @@ export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag,
         height: BOARD_SIZE + BOARD_UNIT
       }}>
         <div 
-          className="text-5xl font-semibold"
+          className="text-5xl font-semibold lg:text-4xl md:text-3xl sm:text-base"
           style={{
             width: BOARD_SIZE + BOARD_UNIT,
             height: (BOARD_SIZE / NUMBER_ROWS_COLUMNS) * HEADER_HEIGHT_SCALE + BOARD_UNIT,

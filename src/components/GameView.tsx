@@ -108,9 +108,6 @@ export function GameView() {
         errorDuringPrediction = true
       });
     }
-
-    console.log('safeClickProbs')
-    console.table(safeClickProbs)
   }
 
   function handleClick(x: number, y: number) {
@@ -157,7 +154,7 @@ export function GameView() {
   return (<div 
       className="flex game-view flex-wrap">
     <div 
-      className="game-panel flex-wrap cursor-pointer mr-[10rem]"
+      className="game-panel flex-wrap cursor-pointer mr-4"
       style={{
         width: BOARD_SIZE + BOARD_UNIT,
         height: BOARD_SIZE + BOARD_UNIT

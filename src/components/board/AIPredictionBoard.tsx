@@ -66,7 +66,7 @@ export function AIPredictionBoard({ known, values, safeClickProbs, isLoading } :
         height: BOARD_SIZE + BOARD_UNIT
       }}>
         <div 
-          className="text-5xl font-semibold"
+          className="text-5xl font-semibold font-semibold lg:text-4xl md:text-3xl sm:text-base"
           style={{
             width: BOARD_SIZE + BOARD_UNIT,
             height: (BOARD_SIZE / NUMBER_ROWS_COLUMNS) * HEADER_HEIGHT_SCALE + BOARD_UNIT,
