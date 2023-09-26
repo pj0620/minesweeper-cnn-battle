@@ -38,12 +38,13 @@ export const VALUE_FONT_COLORS = [
 ]
 
 export const HUMAN_HEADER_COLOR = "darkgreen"
-// export const AI_HEADER_COLOR = "darkblue"
-export const AI_HEADER_COLOR = "black"
+export const AI_HEADER_COLOR = "darkblue"
+// export const AI_HEADER_COLOR = "black"
 
 export const NUM_BOMBS = 10
 
 export const WIN_COLOR = '#006400'
 export const LOSE_COLOR = '#ff0000'
 
-export const GAME_VIEW_BACKGROUND_COLOR = '#000090'
+// export const GAME_VIEW_BACKGROUND_COLOR = '#000090'
+export const GAME_VIEW_BACKGROUND_COLOR = '#000000'
