@@ -35,3 +35,19 @@ export function bytesToBase64(bytes: number[]): string {
   });
   return btoa(binaryString);
 }
+
+export function interpolateColor(
+  startColor: number[], 
+  endColor: number[], 
+  percent: number
+): number[] {
+  return [
+    interpolatePixel(startColor[0], endColor[0], percent),
+    interpolatePixel(startColor[1], endColor[1], percent),
+    interpolatePixel(startColor[2], endColor[2], percent),
+  ]
+}
+
+function interpolatePixel(min: number, max: number, percent: number): number {
+  return min + (max - min) * percent;
+}

@@ -1,4 +1,4 @@
-import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS, FLAG_SIZE_CSS, PROB_SIZE_CSS } from "@/constants/game_board";
+import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS, FLAG_SIZE_CSS, PROB_SIZE_CSS, SMALL_PROB } from "@/constants/game_board";
 import FlagIcon from '@mui/icons-material/Flag';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -9,10 +9,11 @@ interface HiddenCellProps {
   handleFlag: () => void
   flagged: boolean
   displayProb?: number
-  showBomb: boolean
+  showBomb: boolean,
+  showQuestionMark: boolean
 }
 
-export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, flagged, displayProb, showBomb } : HiddenCellProps) {
+export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, flagged, displayProb, showBomb, showQuestionMark } : HiddenCellProps) {
   function getCenterComp() {
     if (flagged) {
       return (<div
@@ -35,9 +36,10 @@ export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, f
     }
 
     else if (displayProb !== undefined) {
+      const changeColor = (displayProb > 0.3) && (displayProb < 0.7)
       return (<div
         style={{
-          color: "#000000",
+          color: changeColor ? "white" : "black",
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -45,7 +47,7 @@ export function HiddenCell({ colorClass, manualColor, handleClick, handleFlag, f
           height: PROB_SIZE_CSS
         }}
         className="font-extrabold prob-text sm:text-xs"
-      > {displayProb.toFixed(2)} </div>)
+      > {showQuestionMark ? '?' : displayProb.toFixed(2)} </div>)
     }
 
     else if (showBomb === true) {

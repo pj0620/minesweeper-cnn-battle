@@ -15,13 +15,15 @@ export const UNKNOWN_COLOR_CLASS_1 = 'bg-lime-400'
 export const UNKNOWN_COLOR_CLASS_2 = 'bg-lime-500'
 export const UNKNOWN_COLOR_CLASS = [UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2]
 
-export const AI_KNOWN_COLOR_CLASS_1 = 'ai-color-1'
-export const AI_KNOWN_COLOR_CLASS_2 = 'ai-color-2'
-export const AI_KNOWN_COLOR_CLASS = [AI_KNOWN_COLOR_CLASS_1, AI_KNOWN_COLOR_CLASS_2]
-
 export const KNOWN_COLOR_CLASS_1 = 'bg-light-brown'
 export const KNOWN_COLOR_CLASS_2 = 'bg-dark-brown'
 export const KNOWN_COLOR_CLASS = [KNOWN_COLOR_CLASS_1, KNOWN_COLOR_CLASS_2]
+
+export const AI_KNOWN_COLOR_CLASS_1 = 'ai-color-1'
+export const AI_KNOWN_COLOR_CLASS_2 = 'ai-color-2'
+export const AI_KNOWN_COLOR_CLASS = [AI_KNOWN_COLOR_CLASS_1, AI_KNOWN_COLOR_CLASS_2]
+// export const AI_KNOWN_COLOR_CLASS = ['bg-gray-600', 'bg-gray-700']
+// export const AI_KNOWN_COLOR_CLASS = [KNOWN_COLOR_CLASS_1, KNOWN_COLOR_CLASS_2]
 
 export const VALUE_FONT_COLORS = [
   "#ffffff", // 0 -> white (will not be used)
@@ -36,9 +38,12 @@ export const VALUE_FONT_COLORS = [
 ]
 
 export const HUMAN_HEADER_COLOR = "darkgreen"
-export const AI_HEADER_COLOR = "darkblue"
+// export const AI_HEADER_COLOR = "darkblue"
+export const AI_HEADER_COLOR = "black"
 
 export const NUM_BOMBS = 10
 
 export const WIN_COLOR = '#006400'
-export const LOSE_COLOR = '#8B0000'
+export const LOSE_COLOR = '#ff0000'
+
+export const GAME_VIEW_BACKGROUND_COLOR = '#000090'

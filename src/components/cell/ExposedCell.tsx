@@ -9,7 +9,7 @@ interface ExposedCellProps {
 export function ExposedCell({ value, colorClass, handleClick } : ExposedCellProps) {
   return (
     <div
-      className={`${colorClass} border border-black text-4xl lg:text-3xl md:text-xl sm:text-sm`}
+      className={`${colorClass} border border-black text-4xl xl:text-4xl lg:text-3xl md:text-xl sm:text-sm`}
       style={{
         display: 'grid',
         placeItems: 'center',

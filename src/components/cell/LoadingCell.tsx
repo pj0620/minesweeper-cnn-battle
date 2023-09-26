@@ -1,4 +1,4 @@
-import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS } from "@/constants/game_board";
+import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS, LOADING_CELL_COLOR } from "@/constants/game_board";
 import LoopIcon from '@mui/icons-material/Loop';
 import { useState, useEffect } from "react";
 
@@ -16,7 +16,7 @@ export function LoadingCell({ colorClass, manualColor} : LoadingCellProps) {
         placeItems: 'center',
         width: BOARD_SIZE_CSS,
         height: BOARD_SIZE_CSS,
-        backgroundColor: 'red'
+        backgroundColor: LOADING_CELL_COLOR
       }}
       onContextMenu={(e) => {
         e.preventDefault() // prevent the default behaviour when right clicked

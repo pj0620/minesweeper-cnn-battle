@@ -1,6 +1,6 @@
 "use client";
 
-import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, BOARD_UNIT, NUM_BOMBS } from "@/constants/game_board";
+import { BOARD_SIZE, UNKNOWN_COLOR_CLASS_1, UNKNOWN_COLOR_CLASS_2, NUMBER_ROWS_COLUMNS, BOARD_UNIT, NUM_BOMBS, GAME_VIEW_BACKGROUND_COLOR, HEADER_HEIGHT_SCALE } from "@/constants/game_board";
 import { generateBombsValues, generateNewBoard } from "@/util/board_utils";
 import { useEffect, useState } from "react";
 import { GameBoard } from "./board/GameBoard";
@@ -21,6 +21,8 @@ export function GameView() {
 
   const [gameStatus, setGameStatus] = useState(GameStatus.IN_PROGRESS)
   let [unknownCells, setUnknownCells] = useState(NUMBER_ROWS_COLUMNS * NUMBER_ROWS_COLUMNS)
+
+  let [guessableMask, setGuessableMask] = useState(generateNewBoard(0))
 
   const aiPlayerService = new AIPlayerService()
 
@@ -134,8 +136,12 @@ export function GameView() {
       return
     }
 
-    updateBoardProbabilities()
+    updateBoardProbabilities().then(() => {
+      setGuessableMask(aiPlayerService.getGuessableMask())
+    })
   }
+    
+  
 
   function restartGame() {
     const { bomb, values } = generateBombsValues()
@@ -149,15 +155,19 @@ export function GameView() {
     setGameStatus(GameStatus.IN_PROGRESS)
 
     setUnknownCells(NUMBER_ROWS_COLUMNS * NUMBER_ROWS_COLUMNS)
+    setGuessableMask(generateNewBoard(0))
   }
 
   return (<div 
-      className="flex game-view flex-wrap">
+      style = {{
+        backgroundColor: GAME_VIEW_BACKGROUND_COLOR,
+      }}
+      className="flex game-view flex-wrap p-5">
     <div 
       className="game-panel flex-wrap cursor-pointer mr-4 md:mr-3"
       style={{
         width: BOARD_SIZE + BOARD_UNIT,
-        height: BOARD_SIZE + BOARD_UNIT
+        height: (HEADER_HEIGHT_SCALE / NUMBER_ROWS_COLUMNS + 1 ) * BOARD_SIZE + BOARD_UNIT
       }}>
     {<GameBoard known={known} bomb={bomb} flags={flags} values={values} 
             handleClick={handleClick} handleFlag={handleFlag} gameStatus={gameStatus}/>
@@ -167,10 +177,10 @@ export function GameView() {
       className="ai-panel cursor-not-allowed"
       style={{
         width: BOARD_SIZE + BOARD_UNIT,
-        height: BOARD_SIZE + BOARD_UNIT
+        height: (HEADER_HEIGHT_SCALE / NUMBER_ROWS_COLUMNS + 1 ) * BOARD_SIZE + BOARD_UNIT
       }}>
     {gameStatus === GameStatus.IN_PROGRESS 
-      ? <AIPredictionBoard known={known} values={values} safeClickProbs={safeClickProbs} isLoading={isLoading}/>
+      ? <AIPredictionBoard known={known} values={values} safeClickProbs={safeClickProbs} isLoading={isLoading} guessableMask={guessableMask}/>
       : <FinalScreen restartGame={restartGame} gameStatus={gameStatus}/>}
     </div>
   </div>)
