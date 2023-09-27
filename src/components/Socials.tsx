@@ -1,7 +1,4 @@
-import { BOARD_SIZE, BOARD_UNIT, GAME_VIEW_BACKGROUND_COLOR, HEADER_HEIGHT_SCALE, LOSE_COLOR, NUMBER_ROWS_COLUMNS, WIN_COLOR } from "@/constants/game_board";
-import { GameStatus } from "@/model/game_state";
-
-export function Credits() {
+export function Socials() {
   return (
     <div
     className="flex flex-col align-bottom bg-slate-300 mr-4 mb-4">

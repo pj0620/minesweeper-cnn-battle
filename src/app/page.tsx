@@ -1,4 +1,4 @@
-import { Credits } from "@/components/Credits";
+import { Socials } from "@/components/Socials";
 import { GameDescription } from "@/components/GameDescription";
 import { GameView } from "@/components/GameView";
 import { GAME_VIEW_BACKGROUND_COLOR } from "@/constants/game_board";
@@ -19,7 +19,7 @@ export default function Home() {
           <GameView />
           <GameDescription/>
         </div>
-        <Credits />
+        <Socials />
       </div>
     </main>
   )

@@ -15,6 +15,13 @@ export function GameDescription({  } : GameDescriptionProps) {
         <li>• <span style={{color: "darkgreen"}}>Green</span> = higher chance cell is safe to click</li>
         <li>• <span style={{color: "darkred"}}>Red</span> = lower chance cell is safe to click</li>
       </ul>
+
+      <h1 className="text-lg font-extrabold mt-2">Code Links</h1>
+      <ul>
+    <li>• <span className="">Frontend React Site:</span> <a href='https://github.com/pj0620/minesweeper-cnn-battle' className="text-blue-500 underline italic">pj0620/minesweeper-cnn-fe</a></li>
+    <li>• <span className="">Backend Flask API:</span> <a href='https://github.com/pj0620/minesweeper-cnn-api' className="text-blue-500 underline italic">pj0620/minesweeper-cnn-api</a></li>
+    <li>• <span className="">R-CNN Training:</span> <a href='https://github.com/pj0620/minesweeper-cnn-v2' className="text-blue-500 underline italic">pj0620/minesweeper-cnn-v2</a></li>
+</ul>
     </div>
   );
 }
