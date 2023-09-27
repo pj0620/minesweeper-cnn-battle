@@ -1,4 +1,4 @@
-import { BOARD_SIZE, NUMBER_ROWS_COLUMNS, VALUE_FONT_COLORS, KNOWN_COLOR_CLASS, UNKNOWN_COLOR_CLASS, BOARD_UNIT, BOARD_SIZE_CSS, FLAG_SIZE_CSS, PROB_SIZE_CSS, SMALL_PROB } from "@/constants/game_board";
+import { BOARD_SIZE_CSS, FLAG_SIZE_CSS, PROB_SIZE_CSS } from "@/constants/game_board";
 import FlagIcon from '@mui/icons-material/Flag';
 import CircleIcon from '@mui/icons-material/Circle';
 

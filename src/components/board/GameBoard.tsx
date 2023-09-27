@@ -31,12 +31,13 @@ export function GameBoard({ known, bomb, flags, values, handleClick, handleFlag,
       )
     } else {
       return (<HiddenCell 
-        key={index} 
+        key={index}
         colorClass={UNKNOWN_COLOR_CLASS[colorIdx]}
-        handleClick={() => {handleClick(i, j)}}
-        handleFlag={() => {handleFlag(i, j)}}
+        handleClick={() => { handleClick(i, j); } }
+        handleFlag={() => { handleFlag(i, j); } }
         flagged={flags[i][j] === 1}
-        showBomb={(bomb[i][j] === 1) && (gameStatus === GameStatus.LOST) }
+        showBomb={(bomb[i][j] === 1) && (gameStatus === GameStatus.LOST)} 
+        showQuestionMark={false}      
       />)
     }
     
