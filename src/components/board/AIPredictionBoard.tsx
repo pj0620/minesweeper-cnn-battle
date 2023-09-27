@@ -39,11 +39,7 @@ export function AIPredictionBoard({ known, values, safeClickProbs, isLoading, gu
         green = Math.min(green, 255)
         green = Math.max(green, 0)
       }
-
-      console.log(`final color: rgb(${red} ${green} ${blue})`)
-
-      // const greyscale = Math.floor(255 * prob)
-
+      
       return (<HiddenCell 
         key={index}
         manualColor={guessableMask[i][j] === 0 ? 'grey' : `rgb(${red} ${green} ${blue})`}
